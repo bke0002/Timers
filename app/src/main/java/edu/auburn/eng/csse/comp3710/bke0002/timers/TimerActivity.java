@@ -44,6 +44,7 @@ public class TimerActivity extends FragmentActivity implements OptionsFragment.o
             for (StickyTimesTimer timer: allTimers) {
                 if (timer.TimerId == timerID){
                     mTimer = timer;
+                    Log.i(TAG, "old timer located");
                     break;
                 }
             }
@@ -88,9 +89,7 @@ public class TimerActivity extends FragmentActivity implements OptionsFragment.o
             fm.executePendingTransactions();
         }
         else {
-            Fragment timerInfoFrag = fm.findFragmentById(R.id.bottomContainerTimer);
-            displayNotes(mTimerInfoString, (TimerInfoFragment) timerInfoFrag);
-            Log.i(TAG, "should have reDisplayed the Notes " + mTimerInfoString);
+
         }
 
         Log.i(TAG, "end of onCreate() TimerActivity");

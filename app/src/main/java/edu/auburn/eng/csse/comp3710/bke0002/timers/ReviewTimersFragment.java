@@ -89,7 +89,7 @@ public class ReviewTimersFragment extends Fragment {
             }
         }
         StickyTimesMarker markers[] = thisTimer.GetMarkers();
-        String titleTextString = thisTimer.Name.substring(5);
+        String titleTextString = thisTimer.Name;
 
         mTitleText = (TextView) mView.findViewById(R.id.reviewTimerText);
         mTitleText.setText(titleTextString);

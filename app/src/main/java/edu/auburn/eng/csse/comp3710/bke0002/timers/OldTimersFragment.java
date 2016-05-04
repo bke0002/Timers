@@ -51,7 +51,7 @@ public class OldTimersFragment extends Fragment {
         final StickyTimesTimer timers[] = StickyTimesTimer.GetTimers(getContext());
         List<String> timerList = new ArrayList<String>();
         for (StickyTimesTimer timer:timers){
-            String timerName = (timer.Name.substring(6)).trim();
+            String timerName = (timer.Name).trim();
             int numberOfSpaces = (width - timerName.length());
             //Log.i(TAG, "Number of Spaces printed: " + numberOfSpaces);
             for (int i = 0; i < numberOfSpaces; i++) {
