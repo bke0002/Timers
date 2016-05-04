@@ -3,11 +3,12 @@ package edu.auburn.eng.csse.comp3710.bke0002.timers;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-public class TimerActivity extends AppCompatActivity implements OptionsFragment.onFragmentInteractionListener,
+public class TimerActivity extends FragmentActivity implements OptionsFragment.onFragmentInteractionListener,
         NoteInfoFragment.onFragmentInteractionListener, ReviewTimersFragment.onFragmentInteractionListener {
     int mMarkerNumber = 0;
     String mTimerInfoString = "";
@@ -15,38 +16,30 @@ public class TimerActivity extends AppCompatActivity implements OptionsFragment.
     String TAG = "Timers";
     StickyTimesTimer mTimer;
     long mNoteTime;
+    boolean mIsTimerDone = false;
 
     private static final String KEY_TIMER_INFO = "infoString";
     private static final String KEY_MARKER_NUMBER = "markerNumber";
     private static final String KEY_TIMER_ID = "timerID";
+    private static final String KEY_NOTE_TIME = "noteTime";
+    private static final String KEY_TIMER_DONE = "isTimerDone";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
 
-
         //Get the bundle (saved timer name and description)
         Bundle bundle = getIntent().getExtras();
         String timerName = bundle.getString("name");
         String timerDescription = bundle.getString("description");
 
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment wholeFrag = new InterimFragment();
-        fm.beginTransaction().add(R.id.wholeFragment, wholeFrag).commit();
-
-        Fragment fragment = new OptionsFragment();
-        fm.beginTransaction()
-                .add(R.id.topContainerTimer, fragment).commit();
-
-        Fragment bottomFrag = new TimerInfoFragment();
-        fm.beginTransaction()
-                .add(R.id.bottomContainerTimer, bottomFrag).commit();
-
         if (savedInstanceState != null) {
             mTimerInfoString = savedInstanceState.getString(KEY_TIMER_INFO);
             mMarkerNumber = savedInstanceState.getInt(KEY_MARKER_NUMBER);
             int timerID = savedInstanceState.getInt(KEY_TIMER_ID);
+            mNoteTime = savedInstanceState.getLong(KEY_NOTE_TIME);
+            mIsTimerDone = savedInstanceState.getBoolean(KEY_TIMER_DONE);
             StickyTimesTimer allTimers[] = StickyTimesTimer.GetTimers(getApplicationContext());
             for (StickyTimesTimer timer: allTimers) {
                 if (timer.TimerId == timerID){
@@ -60,6 +53,47 @@ public class TimerActivity extends AppCompatActivity implements OptionsFragment.
             mTimer = new StickyTimesTimer
                     (getApplicationContext(), timerName, timerDescription, System.currentTimeMillis());
         }
+
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment wholeFrag = fm.findFragmentById(R.id.wholeFragment);
+
+        Log.i(TAG, "mIsTimerDone == " + mIsTimerDone);
+
+        if (mIsTimerDone) {
+            // review fragment loaded
+//            fm.beginTransaction().remove(wholeFrag);
+//            fm.executePendingTransactions();
+//            ReviewTimersFragment reviewTimersFragment = new ReviewTimersFragment();
+//            fm.beginTransaction().add(R.id.wholeFragment, reviewTimersFragment).commit();
+//            fm.executePendingTransactions();
+
+            // send array of markers to the new activity
+            ((ReviewTimersFragment) wholeFrag).displayMarkers(mTimer);
+            ((ReviewTimersFragment) wholeFrag).setButtonText("Menu");
+
+        }
+        else if(wholeFrag == null) {
+            Log.i(TAG, "inside wholeFragment is null code");
+            wholeFrag = new InterimFragment();
+            fm.beginTransaction().add(R.id.wholeFragment, wholeFrag).commit();
+            fm.executePendingTransactions();
+
+            Fragment optFrag = new OptionsFragment();
+            fm.beginTransaction()
+                    .add(R.id.topContainerTimer, optFrag).commit();
+
+            Fragment bottomFrag = new TimerInfoFragment();
+            fm.beginTransaction()
+                    .add(R.id.bottomContainerTimer, bottomFrag).commit();
+            fm.executePendingTransactions();
+        }
+        else {
+            Fragment timerInfoFrag = fm.findFragmentById(R.id.bottomContainerTimer);
+            displayNotes(mTimerInfoString, (TimerInfoFragment) timerInfoFrag);
+            Log.i(TAG, "should have reDisplayed the Notes " + mTimerInfoString);
+        }
+
+        Log.i(TAG, "end of onCreate() TimerActivity");
     }
 
     public void onButtonPressed(String buttonName){
@@ -79,7 +113,6 @@ public class TimerActivity extends AppCompatActivity implements OptionsFragment.
             marker += markerTime/1000.0 + "\n" + mTimerInfoString;
 
             Fragment timerInfoFragment = getSupportFragmentManager().findFragmentById(R.id.bottomContainerTimer);
-
             ((TimerInfoFragment) timerInfoFragment).reDisplayNotes(marker);
             mTimerInfoString = marker;
 
@@ -103,18 +136,22 @@ public class TimerActivity extends AppCompatActivity implements OptionsFragment.
             mTimer.SetLength(System.currentTimeMillis());
             StickyTimesTimer.SaveTimer(getApplicationContext(), mTimer);
 
-            // get all markers from timer and put into array
-            StickyTimesMarker allMarkers[] = mTimer.GetMarkers();
             // go to Review Timer
             FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().remove(fm.findFragmentById(R.id.bottomContainerTimer)).commit();
+            fm.beginTransaction().remove(fm.findFragmentById(R.id.topContainerTimer)).commit();
+
             ReviewTimersFragment reviewFrag = new ReviewTimersFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("timerId", mTimer.TimerId);
+            reviewFrag.setArguments(bundle);
             fm.beginTransaction().replace(R.id.wholeFragment, reviewFrag).commit();
             fm.executePendingTransactions();
 
+            mIsTimerDone = true;
             // send array of markers to the new activity
-            ((ReviewTimersFragment) reviewFrag).displayMarkers(mTimer);
             ((ReviewTimersFragment) reviewFrag).setButtonText("Menu");
-            Log.i(TAG, "displayMarkers() called");
+
         }
     }
 
@@ -163,6 +200,7 @@ public class TimerActivity extends AppCompatActivity implements OptionsFragment.
         outState.putString(KEY_TIMER_INFO, mTimerInfoString);
         outState.putInt(KEY_MARKER_NUMBER, mMarkerNumber);
         outState.putInt(KEY_TIMER_ID, mTimer.TimerId);
-
+        outState.putLong(KEY_NOTE_TIME, mNoteTime);
+        outState.putBoolean(KEY_TIMER_DONE, mIsTimerDone);
     }
 }

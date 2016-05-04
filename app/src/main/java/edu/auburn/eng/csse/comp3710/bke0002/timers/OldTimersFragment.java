@@ -53,7 +53,7 @@ public class OldTimersFragment extends Fragment {
         for (StickyTimesTimer timer:timers){
             String timerName = (timer.Name.substring(6)).trim();
             int numberOfSpaces = (width - timerName.length());
-            Log.i(TAG, "Number of Spaces printed: " + numberOfSpaces);
+            //Log.i(TAG, "Number of Spaces printed: " + numberOfSpaces);
             for (int i = 0; i < numberOfSpaces; i++) {
                 timerName += "_";
             }

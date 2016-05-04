@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context=".ReviewTimersFragment">
+             tools:context="edu.auburn.eng.csse.comp3710.bke0002.timers.ReviewTimersFragment">
 
 
     <LinearLayout
@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:freezesText="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
             android:id="@+id/reviewTimerText"/>
@@ -48,6 +49,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:freezesText="true"
                 android:layout_gravity="end"
                 android:id="@+id/menuButton"/>
 

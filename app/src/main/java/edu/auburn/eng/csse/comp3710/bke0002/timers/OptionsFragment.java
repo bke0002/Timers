@@ -41,9 +41,10 @@ public class OptionsFragment extends Fragment {
         if (savedInstanceState != null) {
             savedTime = savedInstanceState.getLong(KEY_TIME);
         }
+        else {savedTime = SystemClock.elapsedRealtime();}
 
         mChronometer = (Chronometer) v.findViewById(R.id.chronometer);
-        mChronometer.setBase(SystemClock.elapsedRealtime());
+        mChronometer.setBase(savedTime);
         mChronometer.start();
 
         mMarkerButton = (Button) v.findViewById(R.id.marker_button);

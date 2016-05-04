@@ -21,7 +21,7 @@ public class TimerInfoFragment extends Fragment {
     private String mNotesString = "";
     String TAG = "Timers";
     private View mView;
-    String mMarkerString = "";
+    String mMarkerString;
 
     private static final String KEY_MARKERS= "markers";
 
@@ -37,28 +37,27 @@ public class TimerInfoFragment extends Fragment {
         View mView = inflater.inflate(R.layout.fragment_timer_info, container, false);
 
         setRetainInstance(true);
-
         mNotesText = (TextView) mView.findViewById(R.id.outputNotes);
 
-        if (savedInstanceState != null) {
-            mMarkerString = savedInstanceState.getString(KEY_MARKERS);
-            reDisplayNotes(mMarkerString);
-        }
+//        if (savedInstanceState != null) {
+//            mMarkerString = savedInstanceState.getString(KEY_MARKERS);
+//            reDisplayNotes(mMarkerString);
+//        }
 
         return mView;
     }
 
     public void reDisplayNotes(String newNotes) {
-
+        Log.i(TAG, "reDisplayNotes is called " + newNotes);
         mNotesText.setText(newNotes);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putString("KEY_MARKERS", mMarkerString);
-
-    }
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//
+//        outState.putString("KEY_MARKERS", mMarkerString);
+//
+//    }
 
 }

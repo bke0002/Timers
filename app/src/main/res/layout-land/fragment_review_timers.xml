@@ -3,10 +3,10 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:paddingTop="@dimen/activity_vertical_margin"
-             tools:context=".ReviewTimersFragment">
+             tools:context="edu.auburn.eng.csse.comp3710.bke0002.timers.ReviewTimersFragment">
 
 
-    <LinearLayout
+<LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:freezesText="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
             android:id="@+id/reviewTimerText"/>
@@ -50,7 +51,7 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:freezesText="true"
                     android:layout_gravity="center"
                     android:id="@+id/menuButton"/>
             </LinearLayout>

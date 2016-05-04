@@ -29,12 +29,16 @@ public class ReviewTimersFragment extends Fragment {
     Button mMenuButton;
     Button mDescriptionButton;
     onFragmentInteractionListener mCallback;
-    private View v;
+    View mView;
     private ArrayAdapter<String> mMarkerArrayAdapter;
     private ListView mListView;
     String thisTimerName = "";
     String thisTimerDescription = "";
     String mButtonText;
+    TextView mTitleText;
+    Button mButton;
+
+    StickyTimesTimer thisTimer;
 
     String TAG = "Timers";
 
@@ -42,32 +46,76 @@ public class ReviewTimersFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+
+
+
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_review_timers, container, false);
+        mView = inflater.inflate(R.layout.fragment_review_timers, container, false);
 
         setRetainInstance(true);
-
-        mMenuButton = (Button) v.findViewById(R.id.menuButton);
+        mMenuButton = (Button) mView.findViewById(R.id.menuButton);
         mMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCallback.onMenuButtonPressed();
             }
         });
-        mDescriptionButton = (Button) v.findViewById(R.id.descriptionButton);
+        mDescriptionButton = (Button) mView.findViewById(R.id.descriptionButton);
         mDescriptionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(getContext(), thisTimerDescription , Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), thisTimerDescription, Toast.LENGTH_LONG).show();
             }
         });
 
-        return v;
+        Bundle bundle = getArguments();
+        int timerId = bundle.getInt("timerId");
+        StickyTimesTimer allTimers[] = StickyTimesTimer.GetTimers(getContext());
+
+        for (StickyTimesTimer timer: allTimers) {
+            if (timer.TimerId == timerId){
+                thisTimer = timer;
+                break;
+            }
+        }
+        StickyTimesMarker markers[] = thisTimer.GetMarkers();
+        String titleTextString = thisTimer.Name.substring(5);
+
+        mTitleText = (TextView) mView.findViewById(R.id.reviewTimerText);
+        mTitleText.setText(titleTextString);
+        thisTimerDescription = thisTimer.Description;
+        thisTimerName = titleTextString;
+
+        List<String> markerArray = new ArrayList<String>();
+        Log.i(TAG, "String marker Array created");
+
+        for (StickyTimesMarker marker:markers){
+            markerArray.add("" + (marker.Offset/1000.0) + "   "  + marker.Description) ;
+        }
+
+        mMarkerArrayAdapter = new ArrayAdapter<String>
+                (mView.getContext(), android.R.layout.simple_list_item_1, markerArray);
+
+
+        mListView = (ListView) mView.findViewById(R.id.listView);
+        if (mView == null) {
+            Log.i(TAG, "v is null");
+        }
+        mListView.setAdapter(mMarkerArrayAdapter);
+
+
+
+        return mView;
     }
 
     @Override
@@ -92,36 +140,12 @@ public class ReviewTimersFragment extends Fragment {
     }
 
     public void displayMarkers(StickyTimesTimer thisTimer) {
-        StickyTimesMarker markers[] = thisTimer.GetMarkers();
-        String titleTextString = thisTimer.Name.substring(5);
-
-        TextView titleText = (TextView) v.findViewById(R.id.reviewTimerText);
-        titleText.setText(titleTextString);
-        thisTimerDescription = thisTimer.Description;
-        thisTimerName = titleTextString;
-
-        List<String> markerArray = new ArrayList<String>();
-        Log.i(TAG, "String marker Array created");
-
-        for (StickyTimesMarker marker:markers){
-            markerArray.add("" + (marker.Offset/1000.0) + "   "  + marker.Description) ;
-        }
-
-        mMarkerArrayAdapter = new ArrayAdapter<String>
-                (v.getContext(), android.R.layout.simple_list_item_1, markerArray);
-
-
-        mListView = (ListView) v.findViewById(R.id.listView);
-        if (v == null) {
-            Log.i(TAG, "v is null");
-        }
-        mListView.setAdapter(mMarkerArrayAdapter);
 
     }
 
     public void setButtonText(String newButtonText) {
-        Button button = (Button) v.findViewById(R.id.menuButton);
+        mMenuButton = (Button) mView.findViewById(R.id.menuButton);
         mButtonText = newButtonText;
-        button.setText(newButtonText);
+        mMenuButton.setText(newButtonText);
     }
 }
