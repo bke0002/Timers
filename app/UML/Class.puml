@@ -1,0 +1,25 @@
+@startuml
+
+title Classes - Class Diagram
+
+
+class Marker {
+int MarkerId
+string Description [nullable]
+int Offset
+int Duration [nullable]
+int TimerId [nullable]
+}
+
+class Timer{
+int TimerId
+int StartTime
+int Duration
+string Title
+string Description
+}
+
+Marker--Timer
+
+@enduml
+
