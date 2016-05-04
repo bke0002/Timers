@@ -89,6 +89,10 @@ Planned Features (implemented features denoted with ✓, dropped with ✘):
 ✘ Allow users to share their timer information via email
 
 Special Instructions to run application:
-None!
+If you want to see the timer description while on the past timers page, just long press the timer
 
 Known bugs:
+App can be slow when changing activities
+Backstack not always intuitive but is usable
+If the back button is pressed while running a timer, the timer will be saved as is (not really a bug
+    but useful to know)
