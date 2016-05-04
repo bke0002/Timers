@@ -1,0 +1,26 @@
+@startuml
+
+left to right direction
+
+(Start new Timer) as (Start)
+(Place a Note) as (Note)
+(Mark as Important) as (Imp!)
+(Save/End Timer) as (Stop)
+(Review Timer) as (Review)
+(Browse Timers) as (Browse)
+
+Actor User
+
+title Sticky Times \nGroup 17 \nBethany Edgar and Collin Johnson\n
+
+User --> (Start)
+
+User --> (Browse)
+
+(Browse) ..> (Review) : <<includes>>
+(Start) ..> (Note) : <<includes>>
+(Start) ..> (Imp!) : <<includes>>
+(Start) ..> (Stop) : <<includes>>
+(Start) ..> (Review) : <<includes>>
+
+@enduml
