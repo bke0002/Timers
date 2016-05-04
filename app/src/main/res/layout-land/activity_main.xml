@@ -19,6 +19,18 @@
 
     </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/splashScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/splash_screen_land"
+            android:contentDescription="@drawable/splash_screen_land" />
+    </FrameLayout>
 
 
 

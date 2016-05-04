@@ -1,0 +1,79 @@
+@startuml
+actor User
+participant MainActivity
+participant PastTimersActivity
+participant TimerActivity
+database Database
+User -> MainActivity: Open App
+activate MainActivity
+MainActivity --> User: Display Splash Screen
+User <-- MainActivity: Display Main Menu
+alt user tries to\ndisplay old timers\nwith no timers
+    User -> MainActivity: Press "Old Timers"
+    MainActivity -> PastTimersActivity: Open "Past Timers" page
+    deactivate MainActivity
+    activate PastTimersActivity
+    PastTimersActivity -> Database: Request Timers
+    Database --> PastTimersActivity: Return empty list of timers
+    PastTimersActivity --> User: Display empty list\nof timers
+    User -> PastTimersActivity: Press Back button
+    PastTimersActivity -> MainActivity: Open MainActivity
+    destroy PastTimersActivity
+    activate MainActivity
+    MainActivity --> User: Display Main Menu
+else user displays old timers when timers exist
+    User -> MainActivity: Press "Old Timers"
+        MainActivity -> PastTimersActivity: Open "Past Timers" page
+        deactivate MainActivity
+        activate PastTimersActivity
+        PastTimersActivity -> Database: Request Timers
+        Database --> PastTimersActivity: Return list of existing saved timers
+        PastTimersActivity --> User: Display list\nof timers
+        User -> PastTimersActivity: Press Back button
+        PastTimersActivity -> MainActivity: Open MainActivity
+        destroy PastTimersActivity
+        activate MainActivity
+        MainActivity --> User: Display Main Menu
+end
+User -> MainActivity: Press "New Timer"
+MainActivity --> User: Display form for entering new timer info
+User -> MainActivity: Enter Timer Name
+User -> MainActivity: (optional)\nEnter Timer Description
+User -> MainActivity: Press "Start"
+MainActivity -> TimerActivity: Open Timer page
+deactivate MainActivity
+activate TimerActivity
+TimerActivity -> Database: Create Timer
+Database --> TimerActivity: Return Timer from Database
+TimerActivity --> User: Display Timer page
+loop until "Stop" is\npressed or\nBack Button is\npressed
+    alt user presses "Mark"
+        User -> TimerActivity: Press "Mark"
+        TimerActivity --> Database: Create marker object with no note for current Timer
+    else user presses "Note"
+        User -> TimerActivity: Press "Note"
+        TimerActivity -> TimerActivity: Save time of button press
+        TimerActivity --> User: Display form to enter note for marker
+        User -> TimerActivity: Enter marker note
+        User -> TimerActivity: Press "Done"
+        TimerActivity -> Database: Save new Marker with time of button press and given note
+        TimerActivity --> User: Display normal Timer UI
+    else user presses Back button
+        User -> TimerActivity: Presses back button
+        TimerActivity -> MainActivity: Open Timer creation form
+        MainActivity --> User: Display form for entering new timer info
+        destroy TimerActivity
+        activate MainActivity
+    else user presses Stop button
+        User -> TimerActivity: Presses "Stop"
+        TimerActivity -> TimerActivity: Stop timer
+        TimerActivity --> Database: Save Timer information
+        TimerActivity --> User: Display list of markers in timer
+        alt user presses "Description"
+            TimerActivity --> User: Display timer description
+        else user presses "Manu"
+            TimerActivity -> MainActivity: Load Main Menu
+            MainActivity --> User: Display Main Menu
+    end
+end
+@enduml

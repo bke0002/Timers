@@ -55,36 +55,53 @@ public class StickyTimesTimer {
 
         try {
             do {
-                StickyTimesTimer newTimer = new StickyTimesTimer(
-                        c.getInt(c.getColumnIndex("TimerId")),
-                        c.getString(c.getColumnIndex("Name")),
-                        c.getString(c.getColumnIndex("Description")),
-                        c.getLong(c.getColumnIndex("StartTime")),
-                        c.getLong(c.getColumnIndex("Length")));
-                Cursor innerC = db.query(
-                        "Marker",
-                        innerProjection,
-                        "TimerId LIKE ?",
-                        new String[] {String.valueOf(c.getInt(c.getColumnIndex("TimerId")))},
-                        null,
-                        null,
-                        innerSortType
-                );
-
-                innerC.moveToFirst();
-
-                do {
-                    newTimer.Markers.add(new StickyTimesMarker(
-                                    innerC.getInt(innerC.getColumnIndex("MarkerId")),
-                                    innerC.getString(innerC.getColumnIndex("Description")),
-                                    innerC.getInt(innerC.getColumnIndex("Offset")),
-                                    innerC.getInt(innerC.getColumnIndex("TimerId")))
+                try {
+                    StickyTimesTimer newTimer = new StickyTimesTimer(
+                            c.getInt(c.getColumnIndex("TimerId")),
+                            c.getString(c.getColumnIndex("Name")),
+                            c.getString(c.getColumnIndex("Description")),
+                            c.getLong(c.getColumnIndex("StartTime")),
+                            c.getLong(c.getColumnIndex("Length")));
+                    if (newTimer.Length == 0)
+                    {
+                        continue;
+                    }
+                    Cursor innerC = db.query(
+                            "Marker",
+                            innerProjection,
+                            "TimerId LIKE ?",
+                            new String[]{String.valueOf(c.getInt(c.getColumnIndex("TimerId")))},
+                            null,
+                            null,
+                            innerSortType
                     );
-                } while (innerC.moveToNext());
+                    try {
+                        innerC.moveToFirst();
 
-                timers.add(newTimer);
-                innerC.close();
+                        do {
+                            newTimer.Markers.add(new StickyTimesMarker(
+                                            innerC.getInt(innerC.getColumnIndex("MarkerId")),
+                                            innerC.getString(innerC.getColumnIndex("Description")),
+                                            innerC.getInt(innerC.getColumnIndex("Offset")),
+                                            innerC.getInt(innerC.getColumnIndex("TimerId")))
+                            );
+                        } while (innerC.moveToNext());
+                    }
+                    catch (Exception e)
+                    {
 
+                    }
+
+
+                    timers.add(newTimer);
+                    innerC.close();
+                }
+                catch (Exception e)
+                {
+                    for (int i = 0; i < 10; i++){
+                        System.out.println(e.toString());
+                    }
+                }
             }
             while (c.moveToNext());
         }

@@ -183,6 +183,7 @@ public class TimerActivity extends FragmentActivity implements OptionsFragment.o
 
     public void onMenuButtonPressed() {
         Intent i = new Intent(TimerActivity.this, MainActivity.class);
+        i.putExtra("IsFirstLaunch", false);
         startActivity(i);
     }
 
