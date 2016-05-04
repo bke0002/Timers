@@ -1,0 +1,52 @@
+@startuml
+
+left to right direction
+
+(Start new Timer) as (Start)
+(Place a Note) as (Note)
+(Mark as Important) as (Imp!)
+(Set Start Range) as (SRange)
+(Set End of Range) as (ERange)
+    (End Range with Note) as (ENoteRange)
+(Save/End Timer) as (Stop)
+(Search Timers) as (Search)
+(Delete Timer) as (Delete)
+(Review Timer) as (Review)
+    (Rename Timer) as (Rename)
+    (Change Timer Description) as (changeDescript)
+    (Change Note text) as (changeNote)
+    (Delete Marker) as (delMark)
+    (Delete Range) as (delRange)
+(Share a Timer) as (Share)
+
+Actor User
+
+title Sticky Times \nGroup 17 \nBethany Edgar and Collin Johnson
+
+User --> (Start)
+User --> (Note)
+User --> (Imp!)
+User --> (SRange)
+User --> (ERange)
+User --> (Stop)
+User --> (Search)
+User --> (Delete)
+User --> (Review)
+User --> (Share)
+
+(Review) ..> (Rename) : <<includes>>
+(Review) ..> (changeDescript) : <<includes>>
+(Review) ..> (changeNote) : <<includes>>
+(Review) ..> (delMark) : <<includes>>
+(Review) ..> (delRange) : <<includes>>
+(ERange) ..> (ENoteRange) : <<includes>>
+
+(SRange) - (ERange)
+(Search) - (Review)
+(Review) - (Delete)
+(Review) -- (Share)
+(Start) - (Stop)
+
+
+
+@enduml
