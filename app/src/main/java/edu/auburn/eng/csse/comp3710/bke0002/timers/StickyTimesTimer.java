@@ -62,6 +62,10 @@ public class StickyTimesTimer {
                             c.getString(c.getColumnIndex("Description")),
                             c.getLong(c.getColumnIndex("StartTime")),
                             c.getLong(c.getColumnIndex("Length")));
+                    if (newTimer.Length == 0)
+                    {
+                        continue;
+                    }
                     Cursor innerC = db.query(
                             "Marker",
                             innerProjection,
@@ -85,7 +89,7 @@ public class StickyTimesTimer {
                     }
                     catch (Exception e)
                     {
-                        
+
                     }
 
 
