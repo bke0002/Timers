@@ -146,6 +146,7 @@ public class TimerActivity extends AppCompatActivity implements OptionsFragment.
 
     public void onMenuButtonPressed() {
         Intent i = new Intent(TimerActivity.this, MainActivity.class);
+        i.putExtra("IsFirstLaunch", false);
         startActivity(i);
     }
 
