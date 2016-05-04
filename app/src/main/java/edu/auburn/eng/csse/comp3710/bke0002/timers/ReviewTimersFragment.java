@@ -34,6 +34,7 @@ public class ReviewTimersFragment extends Fragment {
     private ListView mListView;
     String thisTimerName = "";
     String thisTimerDescription = "";
+    String mButtonText;
 
     String TAG = "Timers";
 
@@ -120,6 +121,7 @@ public class ReviewTimersFragment extends Fragment {
 
     public void setButtonText(String newButtonText) {
         Button button = (Button) v.findViewById(R.id.menuButton);
+        mButtonText = newButtonText;
         button.setText(newButtonText);
     }
 }

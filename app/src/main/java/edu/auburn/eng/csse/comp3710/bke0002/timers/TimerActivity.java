@@ -18,18 +18,13 @@ public class TimerActivity extends AppCompatActivity implements OptionsFragment.
 
     private static final String KEY_TIMER_INFO = "infoString";
     private static final String KEY_MARKER_NUMBER = "markerNumber";
-
+    private static final String KEY_TIMER_ID = "timerID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
 
-        if (savedInstanceState != null) {
-            mTimerInfoString = savedInstanceState.getString(KEY_TIMER_INFO);
-            mMarkerNumber = savedInstanceState.getInt(KEY_MARKER_NUMBER);
-
-        }
 
         //Get the bundle (saved timer name and description)
         Bundle bundle = getIntent().getExtras();
@@ -48,9 +43,23 @@ public class TimerActivity extends AppCompatActivity implements OptionsFragment.
         fm.beginTransaction()
                 .add(R.id.bottomContainerTimer, bottomFrag).commit();
 
-        mTimer = new StickyTimesTimer
-                (getApplicationContext(), timerName, timerDescription, System.currentTimeMillis());
+        if (savedInstanceState != null) {
+            mTimerInfoString = savedInstanceState.getString(KEY_TIMER_INFO);
+            mMarkerNumber = savedInstanceState.getInt(KEY_MARKER_NUMBER);
+            int timerID = savedInstanceState.getInt(KEY_TIMER_ID);
+            StickyTimesTimer allTimers[] = StickyTimesTimer.GetTimers(getApplicationContext());
+            for (StickyTimesTimer timer: allTimers) {
+                if (timer.TimerId == timerID){
+                    mTimer = timer;
+                    break;
+                }
+            }
 
+        }
+        else {
+            mTimer = new StickyTimesTimer
+                    (getApplicationContext(), timerName, timerDescription, System.currentTimeMillis());
+        }
     }
 
     public void onButtonPressed(String buttonName){
@@ -153,6 +162,7 @@ public class TimerActivity extends AppCompatActivity implements OptionsFragment.
 
         outState.putString(KEY_TIMER_INFO, mTimerInfoString);
         outState.putInt(KEY_MARKER_NUMBER, mMarkerNumber);
+        outState.putInt(KEY_TIMER_ID, mTimer.TimerId);
 
     }
 }

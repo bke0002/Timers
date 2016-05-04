@@ -21,10 +21,14 @@ public class MainActivity extends FragmentActivity
 
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = new TitleFragment();
-        fm.beginTransaction()
-                .add(R.id.mainFrag, fragment).commit();
+        Fragment fragment = fm.findFragmentById(R.id.mainFrag);
 
+        if (fragment == null) {
+            fragment = new TitleFragment();
+            fm.beginTransaction()
+                    .add(R.id.mainFrag, fragment).commit();
+            fm.executePendingTransactions();
+        }
     }
 
     public void onNewTimerButtonPressed() {
@@ -33,6 +37,7 @@ public class MainActivity extends FragmentActivity
         Fragment newTimerFrag = new NewTimerFragment();
 
         fm.beginTransaction().replace(R.id.mainFrag, newTimerFrag).commit();
+        fm.executePendingTransactions();
 
     }
 
