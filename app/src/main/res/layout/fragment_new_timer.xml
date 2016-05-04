@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              tools:context="edu.auburn.eng.csse.comp3710.bke0002.timers.NewTimerFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/create_timer_text"
+            android:gravity="center"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:text="Name: "
+            android:ems="10"
+            android:id="@+id/enterNameHere"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".5"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Description:"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:id="@+id/describeTimerHere"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/start_timer_button"
+            android:layout_gravity="center"
+            android:id="@+id/startTimerButton"/>
+
+</LinearLayout>
+
